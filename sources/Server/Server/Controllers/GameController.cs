@@ -35,7 +35,7 @@ namespace Server.Controllers
         [HttpGet]
         public JsonResult Index()
         {
-            GameStateModel gameStateModel = new GameStateModel(Game);
+            GameInfoModel gameStateModel = new GameInfoModel(Game);
             return Json(gameStateModel);
         }
 
@@ -46,6 +46,14 @@ namespace Server.Controllers
         {
             GameStateModel gameStateModel = new GameStateModel(Game);
             return Json(gameStateModel);
+        }
+
+        // GET
+        [HttpPut]
+        [Route("reset")]
+        public void Reset()
+        {
+            Game.Reset();
         }
 
         [HttpPost]

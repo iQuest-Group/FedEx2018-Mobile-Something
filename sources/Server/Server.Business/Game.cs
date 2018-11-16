@@ -5,10 +5,11 @@ namespace Server.Business
 {
     public class Game
     {
-        private Player player1;
-        private Player player2;
-
         private readonly GameBoard gameBoard = new GameBoard();
+
+        public Player Player1 { get; private set; }
+
+        public Player Player2 { get; private set; }
 
         public IEnumerable<CellState> Cells => gameBoard.Cells;
 
@@ -16,10 +17,10 @@ namespace Server.Business
 
         public Player NextPlayer { get; set; }
 
-        public void Start()
+        public void Reset()
         {
-            player1 = null;
-            player2 = null;
+            Player1 = null;
+            Player2 = null;
 
             State = GameState.New;
             NextPlayer = null;
@@ -30,16 +31,16 @@ namespace Server.Business
             if (State != GameState.New)
                 throw new Exception("A game is already in progress.");
 
-            if (player1 == null)
+            if (Player1 == null)
             {
-                player1 = player;
+                Player1 = player;
                 return;
             }
 
-            if (player2 == null)
+            if (Player2 == null)
             {
-                player2 = player;
-                NextPlayer = player1;
+                Player2 = player;
+                NextPlayer = Player1;
                 State = GameState.InProgress;
                 return;
             }
@@ -61,17 +62,18 @@ namespace Server.Business
             if (y < 0 || y > 2)
                 throw new ArgumentException($"Invlid position: [{x},{y}]", nameof(y));
 
-            if (playerId == player1.Id)
+            if (playerId == Player1.Id)
+            {
                 gameBoard.Set(x, y, CellState.X);
-            else if (playerId == player2.Id)
+                NextPlayer = Player2;
+            }
+            else if (playerId == Player2.Id)
+            {
                 gameBoard.Set(x, y, CellState.O);
+                NextPlayer = Player1;
+            }
             else
                 throw new ArgumentException("Invlid player id.", nameof(playerId));
-        }
-
-        public void Listen()
-        {
-
         }
     }
 }
