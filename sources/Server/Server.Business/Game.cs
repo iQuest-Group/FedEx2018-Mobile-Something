@@ -107,7 +107,7 @@ namespace Server.Business
 
         private void CheckColumn(int i)
         {
-            CellState[] column = gameBoard.GetRow(i).ToArray();
+            CellState[] column = gameBoard.GetColumn(i).ToArray();
             CheckList(column);
         }
 
@@ -122,9 +122,9 @@ namespace Server.Business
 
         private void CheckList(IReadOnlyList<CellState> row)
         {
-            bool isSameValue = row[0] != row[1] || row[0] != row[2];
+            bool isSameValue = row[0] == row[1] && row[0] == row[2];
 
-            if (isSameValue)
+            if (!isSameValue)
                 return;
 
             switch (row[0])
