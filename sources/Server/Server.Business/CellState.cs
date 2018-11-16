@@ -3,7 +3,7 @@
     public enum CellState
     {
         Empty = 0,
-        X,
-        O
+        X = 1,
+        O = 2
     }
 }

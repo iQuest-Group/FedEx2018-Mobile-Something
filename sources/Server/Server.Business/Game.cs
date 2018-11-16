@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Server.Business
 {
@@ -27,6 +28,7 @@ namespace Server.Business
             State = GameState.New;
             gameBoard.Reset();
             NextPlayer = null;
+            Winner = null;
         }
 
         public void Register(Player player)
@@ -76,6 +78,8 @@ namespace Server.Business
             {
                 gameBoard.Set(x, y, CellState.O);
                 NextPlayer = Player1;
+
+                AnalyseBoard();
             }
             else
                 throw new ArgumentException("Invlid player id.", nameof(playerId));
@@ -88,50 +92,64 @@ namespace Server.Business
 
             for (int i = 0; i < 3; i++)
             {
-                CellState? cellStateColumn = gameBoard.IsColumnOfSameState(i);
-
-                switch (cellStateColumn)
-                {
-                    case null:
-                    case CellState.Empty:
-                        break;
-
-                    case CellState.X:
-                        Winner = Player1;
-                        State = GameState.Finished;
-                        break;
-
-                    case CellState.O:
-                        Winner = Player2;
-                        State = GameState.Finished;
-                        break;
-
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-
-                CellState? cellStateRow = gameBoard.IsRowOfSameState(i);
-
-                switch (cellStateRow)
-                {
-                    case null:
-                    case CellState.Empty:
-                        break;
-
-                    case CellState.X:
-                        Winner = Player1;
-                        State = GameState.Finished;
-                        break;
-
-                    case CellState.O:
-                        Winner = Player2;
-                        State = GameState.Finished;
-                        break;
-
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
+                CheckColumn(i);
+                CheckRow(i);
             }
+
+            CheckDiagonals();
+        }
+
+        private void CheckRow(int i)
+        {
+            CellState[] row = gameBoard.GetRow(i).ToArray();
+            CheckList(row);
+        }
+
+        private void CheckColumn(int i)
+        {
+            CellState[] column = gameBoard.GetRow(i).ToArray();
+            CheckList(column);
+        }
+
+        private void CheckDiagonals()
+        {
+            CellState[] diagonal1 = gameBoard.GetFirstDiagonal().ToArray();
+            CheckList(diagonal1);
+
+            CellState[] diagonal2 = gameBoard.GetSecondDiagonal().ToArray();
+            CheckList(diagonal2);
+        }
+
+        private void CheckList(IReadOnlyList<CellState> row)
+        {
+            bool isSameValue = row[0] != row[1] || row[0] != row[2];
+
+            if (isSameValue)
+                return;
+
+            switch (row[0])
+            {
+                case CellState.Empty:
+                    break;
+
+                case CellState.X:
+                    Winner = Player1;
+                    State = GameState.Finished;
+                    break;
+
+                case CellState.O:
+                    Winner = Player2;
+                    State = GameState.Finished;
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        public override string ToString()
+        {
+            return gameBoard.ToString();
         }
     }
 }
