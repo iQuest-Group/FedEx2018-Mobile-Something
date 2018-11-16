@@ -47,9 +47,26 @@ namespace Server.Business
             throw new Exception("There are already two players in the game.");
         }
 
-        public void Move()
+        public void Move(Guid playerId, int x, int y)
         {
+            if (State != GameState.InProgress)
+                throw new Exception("The game is not started.");
 
+            if (NextPlayer?.Id != playerId)
+                throw new ArgumentException($"It's player's {NextPlayer.Name} turn. Player id: {NextPlayer.Id}.", nameof(playerId));
+
+            if (x < 0 || x > 2)
+                throw new ArgumentException($"Invlid position: [{x},{y}]", nameof(x));
+
+            if (y < 0 || y > 2)
+                throw new ArgumentException($"Invlid position: [{x},{y}]", nameof(y));
+
+            if (playerId == player1.Id)
+                gameBoard.Set(x, y, CellState.X);
+            else if (playerId == player2.Id)
+                gameBoard.Set(x, y, CellState.O);
+            else
+                throw new ArgumentException("Invlid player id.", nameof(playerId));
         }
 
         public void Listen()

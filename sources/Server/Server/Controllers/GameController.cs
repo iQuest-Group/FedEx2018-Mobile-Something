@@ -61,5 +61,15 @@ namespace Server.Controllers
 
             return Json(player.Id);
         }
+
+        [HttpPost]
+        [Route("move")]
+        public JsonResult Move([FromBody] PlayerMoveModel playerMoveModel)
+        {
+            Game.Move(playerMoveModel.PlayerId, playerMoveModel.X, playerMoveModel.Y);
+
+            GameStateModel gameStateModel = new GameStateModel(Game);
+            return Json(gameStateModel);
+        }
     }
 }
