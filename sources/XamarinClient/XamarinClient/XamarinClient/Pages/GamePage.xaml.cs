@@ -18,6 +18,7 @@ namespace XamarinClient.Pages
 		{
 			InitializeComponent ();
 		    BindingContext = gameViewModel;
+		    gameViewModel.Navigation = Navigation;
 		}
 	}
 }

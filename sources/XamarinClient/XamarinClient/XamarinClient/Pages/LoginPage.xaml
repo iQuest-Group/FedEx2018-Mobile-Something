@@ -5,7 +5,7 @@
     <ContentPage.Content>
         <StackLayout>
             <Label Text="Login" />
-            <Entry Text="{Binding User.Username}" />
+            <Entry Text="{Binding User.Name}" />
             <Button Text="Login" Command="{Binding Login}"/>
         </StackLayout>
     </ContentPage.Content>

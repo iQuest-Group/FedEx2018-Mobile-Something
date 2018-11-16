@@ -3,8 +3,64 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="XamarinClient.Pages.GamePage">
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="{Binding Game.User.Username}" />
-        </StackLayout>
+
+        <Grid>
+            <StackLayout>
+                <Label Text="{Binding Game.StateMessage}" HorizontalOptions="Center" FontSize="20"></Label>
+                <Grid>
+                    <Image
+                Source="tictactoe.gif"
+                HorizontalOptions="Fill"
+                VerticalOptions="Fill"
+                Aspect="Fill"/>
+
+                    <Grid >
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+
+                        <Button Grid.Row="0" Grid.Column="0" BackgroundColor="Transparent" Text="{Binding Game.Pos1}" FontSize="80"
+                        Command="{Binding MakeMove}"
+                        CommandParameter="1"/>
+                        <Button Grid.Row="0" Grid.Column="1" BackgroundColor="Transparent" Text="{Binding Game.Pos2}" FontSize="80"
+                        Command="{Binding MakeMove}"
+                        CommandParameter="2"/>
+                        <Button Grid.Row="0" Grid.Column="2" BackgroundColor="Transparent" Text="{Binding Game.Pos3}" FontSize="80"
+                        Command="{Binding MakeMove}"
+                        CommandParameter="3"/>
+                        <Button Grid.Row="1" Grid.Column="0" BackgroundColor="Transparent" Text="{Binding Game.Pos4}" FontSize="80"
+                        Command="{Binding MakeMove}"
+                        CommandParameter="4"/>
+                        <Button Grid.Row="1" Grid.Column="1" BackgroundColor="Transparent" Text="{Binding Game.Pos5}" FontSize="80"
+                        Command="{Binding MakeMove}"
+                        CommandParameter="5"/>
+                        <Button Grid.Row="1" Grid.Column="2" BackgroundColor="Transparent" Text="{Binding Game.Pos6}" FontSize="80"
+                        Command="{Binding MakeMove}"
+                        CommandParameter="6"/>
+                        <Button Grid.Row="2" Grid.Column="0" BackgroundColor="Transparent" Text="{Binding Game.Pos7}" FontSize="80"
+                        Command="{Binding MakeMove}"
+                        CommandParameter="7"/>
+                        <Button Grid.Row="2" Grid.Column="1" BackgroundColor="Transparent" Text="{Binding Game.Pos8}" FontSize="80"
+                        Command="{Binding MakeMove}"
+                        CommandParameter="8"/>
+                        <Button Grid.Row="2" Grid.Column="2" BackgroundColor="Transparent" Text="{Binding Game.Pos9}" FontSize="80"
+                        Command="{Binding MakeMove}"
+                        CommandParameter="9"/>
+                    </Grid>
+
+                </Grid>
+            </StackLayout>
+        </Grid>
+
     </ContentPage.Content>
 </ContentPage>

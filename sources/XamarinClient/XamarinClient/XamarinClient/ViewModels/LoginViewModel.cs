@@ -1,7 +1,10 @@
-﻿using System.Windows.Input;
+﻿using System.Threading.Tasks;
+using System.Windows.Input;
 using Xamarin.Forms;
+using XamarinClient.Dto;
 using XamarinClient.Models;
 using XamarinClient.Pages;
+using XamarinClient.Services;
 
 namespace XamarinClient.ViewModels
 {
@@ -10,17 +13,36 @@ namespace XamarinClient.ViewModels
         public LoginViewModel()
         {
             User = new User();
-            Login = new Command(a => OnLoginClicked());
+            Login = new Command(async a => await OnLoginClicked());
         }
+
+
 
         public User User { get; set; }
 
         public ICommand Login { get; set; }
         public INavigation Navigation { get; set; }
 
-        private void OnLoginClicked()
+        private async Task OnLoginClicked()
         {
-            Navigation.PushModalAsync(new GamePage(new GameViewModel(User)));
+            if (string.IsNullOrEmpty(User.Name))
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", "Please enter a name", "Cancel");
+                return;
+            }
+
+            var service = new GameService();
+            var id = await service.Register(new UserDto{Name = User.Name});
+
+            if (string.IsNullOrEmpty(id))
+            {
+
+                await Application.Current.MainPage.DisplayAlert("Error", "Register failed", "Cancel");
+                return;
+            }
+
+            User.Id = id;
+            await Navigation.PushModalAsync(new GamePage(new GameViewModel(User)));
         }
     }
 }
