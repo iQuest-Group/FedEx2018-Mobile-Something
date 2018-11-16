@@ -33,7 +33,6 @@ namespace Server.Controllers
 
         // GET
         [HttpGet]
-        [Route("state")]
         public JsonResult Index()
         {
             GameStateModel gameStateModel = new GameStateModel(Game);
