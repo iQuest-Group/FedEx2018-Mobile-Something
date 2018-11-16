@@ -11,6 +11,8 @@ namespace Server.Business
 
         public Player Player2 { get; private set; }
 
+        public Player Winner { get; private set; }
+
         public IEnumerable<CellState> Cells => gameBoard.Cells;
 
         public GameState State { get; private set; }
@@ -23,6 +25,7 @@ namespace Server.Business
             Player2 = null;
 
             State = GameState.New;
+            gameBoard.Reset();
             NextPlayer = null;
         }
 
@@ -66,6 +69,8 @@ namespace Server.Business
             {
                 gameBoard.Set(x, y, CellState.X);
                 NextPlayer = Player2;
+
+                AnalyseBoard();
             }
             else if (playerId == Player2.Id)
             {
@@ -74,6 +79,59 @@ namespace Server.Business
             }
             else
                 throw new ArgumentException("Invlid player id.", nameof(playerId));
+        }
+
+        private void AnalyseBoard()
+        {
+            if (gameBoard.IsFull)
+                State = GameState.Finished;
+
+            for (int i = 0; i < 3; i++)
+            {
+                CellState? cellStateColumn = gameBoard.IsColumnOfSameState(i);
+
+                switch (cellStateColumn)
+                {
+                    case null:
+                    case CellState.Empty:
+                        break;
+
+                    case CellState.X:
+                        Winner = Player1;
+                        State = GameState.Finished;
+                        break;
+
+                    case CellState.O:
+                        Winner = Player2;
+                        State = GameState.Finished;
+                        break;
+
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
+                CellState? cellStateRow = gameBoard.IsRowOfSameState(i);
+
+                switch (cellStateRow)
+                {
+                    case null:
+                    case CellState.Empty:
+                        break;
+
+                    case CellState.X:
+                        Winner = Player1;
+                        State = GameState.Finished;
+                        break;
+
+                    case CellState.O:
+                        Winner = Player2;
+                        State = GameState.Finished;
+                        break;
+
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
         }
     }
 }

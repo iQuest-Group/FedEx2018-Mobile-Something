@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Server.Business;
 
 namespace Server.ViewModels
@@ -13,8 +14,9 @@ namespace Server.ViewModels
 
         public Player Player2 { get; set; }
         
+        public Guid? NextPlayer { get; set; }
 
-        public string NextPlayer { get; set; }
+        public Guid? Winner { get; set; }
 
         public GameInfoModel(Game game)
         {
@@ -22,7 +24,8 @@ namespace Server.ViewModels
             GameState = (int)game.State;
             Player1 = game.Player1;
             Player2 = game.Player2;
-            NextPlayer = game.NextPlayer?.Id.ToString("N");
+            NextPlayer = game.NextPlayer?.Id;
+            Winner = game.Winner?.Id;
         }
     }
 }

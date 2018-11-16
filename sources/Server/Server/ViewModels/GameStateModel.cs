@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Server.Business;
 
 namespace Server.ViewModels
@@ -9,13 +10,16 @@ namespace Server.ViewModels
 
         public int GameState { get; set; }
 
-        public string NextPlayer { get; set; }
+        public Guid? NextPlayer { get; set; }
+
+        public Guid? Winner { get; set; }
 
         public GameStateModel(Game game)
         {
             Board = string.Join(",", game.Cells.Cast<int>());
             GameState = (int)game.State;
-            NextPlayer = game.NextPlayer?.Id.ToString("N");
+            NextPlayer = game.NextPlayer?.Id;
+            Winner = game.Winner?.Id;
         }
     }
 }
