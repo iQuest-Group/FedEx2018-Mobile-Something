@@ -14,6 +14,7 @@
 // // You should have received a copy of the GNU General Public License
 // // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using System;
 using Microsoft.AspNetCore.Mvc;
 using Server.Business;
 using Server.ViewModels;
@@ -33,33 +34,92 @@ namespace Server.Controllers
 
         // GET
         [HttpGet]
-        public JsonResult Index()
+        public ActionResult Index()
         {
-            GameStateModel gameStateModel = new GameStateModel(Game);
-            return Json(gameStateModel);
+            try
+            {
+                GameInfoModel gameStateModel = new GameInfoModel(Game);
+                return Json(gameStateModel);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
         }
 
         // GET
         [HttpGet]
         [Route("state")]
-        public JsonResult State()
+        public ActionResult State()
         {
-            GameStateModel gameStateModel = new GameStateModel(Game);
-            return Json(gameStateModel);
+            try
+            {
+                GameStateModel gameStateModel = new GameStateModel(Game);
+                return Json(gameStateModel);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
+        }
+
+        // GET
+        [HttpPut]
+        [Route("reset")]
+        public ActionResult Reset()
+        {
+            try
+            {
+                Game.Reset();
+
+                return StatusCode(200);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
         }
 
         [HttpPost]
         [Route("register")]
-        public JsonResult Register([FromBody] PlayerRegistrationModel playerRegistrationModel)
+        public ActionResult Register([FromBody] PlayerRegistrationModel playerRegistrationModel)
         {
-            Player player = new Player
+            try
             {
-                Name = playerRegistrationModel.Name
-            };
+                Player player = new Player
+                {
+                    Name = playerRegistrationModel.Name
+                };
 
-            Game.Register(player);
+                Game.Register(player);
 
-            return Json(player.Id);
+                return Json(player.Id);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
+        }
+
+        [HttpPost]
+        [Route("move")]
+        public ActionResult Move([FromBody] PlayerMoveModel playerMoveModel)
+        {
+            try
+            {
+                Guid playerId = playerMoveModel.PlayerId;
+                int x = playerMoveModel.X;
+                int y = playerMoveModel.Y;
+
+                Game.Move(playerId, x, y);
+
+                GameStateModel gameStateModel = new GameStateModel(Game);
+                return Json(gameStateModel);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
         }
     }
 }

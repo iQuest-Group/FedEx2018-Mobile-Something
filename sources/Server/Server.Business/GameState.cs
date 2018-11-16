@@ -2,8 +2,8 @@
 {
     public enum GameState
     {
-        New,
-        InProgress,
-        Finished
+        New = 0,
+        InProgress = 1,
+        Finished = 2
     }
 }

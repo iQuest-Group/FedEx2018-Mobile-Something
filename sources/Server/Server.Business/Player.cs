@@ -12,5 +12,10 @@ namespace Server.Business
         {
             Id = Guid.NewGuid();
         }
+
+        public override string ToString()
+        {
+            return Name + " - " + Id;
+        }
     }
 }
